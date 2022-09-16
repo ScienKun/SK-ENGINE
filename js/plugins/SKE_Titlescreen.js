@@ -114,6 +114,44 @@ class TitleScreen extends Engine {
 
 SKE.TTSE._ttse = new TitleScreen();
 
+let htmlChild = [null];
+
+function eraseHtml () {
+    document.body.removeChild(htmlChild[1]);
+}
+
+function createHtml () {
+    let html = document.createElement('div');
+    html.id = "caroussel";
+    html.style.position = "absolute";
+    html.style.borderRadius = "25px";
+    html.style.top = "25px";
+    html.style.left = "55px";
+    html.style.background = `linear-gradient(0deg, rgba(195,34,76,1) 0%, rgba(228,87,46,1) 100%)`;
+    html.style.zIndex = 10;
+    html.style.width = "560px";
+    html.style.height = "315px";
+    html.style.margin = "auto";
+    let yt = document.createElement("div");
+    yt.innerHTML = `<iframe width="250" height="165" style="border-radius: 15px" src="https://www.youtube.com/embed/frw76rwbd1w" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+    yt.style.borderRadius = "25px";
+    yt.style.objectFit = "fill";
+    let xy = document.createElement("a");
+    xy.innerText = "Click here !";
+    xy.style.backgroundColor = "#e38c6f";
+    xy.style.display = "inline-block";
+    xy.style.width = "120px";
+    xy.style.padding = "12px";
+    xy.style.position = "absolute";
+    xy.style.top = "25px";
+    xy.style.left = "55px";
+    xy.target = "_blank";
+    xy.href = "https://www.youtube.com/watch?v=frw76rwbd1w";
+    html.appendChild(xy);
+    html.appendChild(yt);
+    document.body.appendChild(html);
+    htmlChild.push(html);
+}
 
 (() => {
     "use strict";
@@ -153,8 +191,16 @@ SKE.TTSE._ttse = new TitleScreen();
         this._newText = new Sprite(new Bitmap(Graphics.width, Graphics.height));
         this.addChild(this._newText);
         SKE.TTSE._ttse.drawText(this._newText);
-    }
+        createHtml();
+    };
 
+    const _scene_title_terminate = Scene_Title.prototype.terminate;
+    Scene_Title.prototype.terminate = function() {
+        eraseHtml();
+        _scene_title_terminate.apply(this, arguments);
+    };
+    
+    
     
 
 })();
